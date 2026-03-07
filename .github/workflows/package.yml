@@ -45,9 +45,7 @@ jobs:
             os: windows-latest
             npm_script: pack:win
             artifact_name: windows-nsis
-            artifact_path: |
-              dist/*.exe
-              dist/*.blockmap
+            artifact_path: dist/*.exe
           - name: Linux AppImage+DEB
             os: ubuntu-latest
             npm_script: pack:linux
@@ -92,6 +90,9 @@ jobs:
           pattern: yuketang-*-v${{ needs.meta.outputs.version }}
           merge-multiple: true
           path: release-artifacts
+
+      - name: Remove blockmap files
+        run: find release-artifacts -name "*.blockmap" -type f -delete
 
       - name: Create or update GitHub release
         uses: ncipollo/release-action@v1

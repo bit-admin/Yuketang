@@ -19,6 +19,8 @@ npm install
 npm start
 ```
 
+Builds are automated via GitHub Actions on push to `main`.
+
 ## Usage
 
 1. Sign in through the embedded Yuketang page.
@@ -27,18 +29,10 @@ npm start
 4. Set output directory and format in the top control bar.
 5. Click `Export`.
 
-## CI Packaging
+## Credits
 
-GitHub Actions workflow: `.github/workflows/package.yml`
+Based on the original Python automation script by fu-zc23 (THU).
 
-- Triggers:
-  - `workflow_dispatch`
-  - push to `main`
-- Outputs:
-  - macOS: `dmg`
-  - Windows: `nsis` installer (`.exe`)
-  - Linux: `AppImage` and `deb` (with maintainer `Yuketang Maintainer <packager@yuketang.app>`)
-- Release:
-  - Reads version from `package.json`
-  - Publishes/updates GitHub Release with tag `v<version>`
-  - Uploads packaged files to that release
+## License
+
+This project is released under the [MIT License](LICENSE). © 2026 bit-admin
