@@ -1,0 +1,106 @@
+name: Package Desktop App
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  meta:
+    name: Read Version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve version from package.json
+        id: version
+        shell: bash
+        run: |
+          VERSION="$(node -p "require('./package.json').version")"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+
+  package:
+    name: ${{ matrix.name }}
+    needs: meta
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: macOS DMG
+            os: macos-latest
+            npm_script: pack:mac
+            artifact_name: macos-dmg
+            artifact_path: dist/*.dmg
+          - name: Windows NSIS
+            os: windows-latest
+            npm_script: pack:win
+            artifact_name: windows-nsis
+            artifact_path: |
+              dist/*.exe
+              dist/*.blockmap
+          - name: Linux AppImage+DEB
+            os: ubuntu-latest
+            npm_script: pack:linux
+            artifact_name: linux-appimage-deb
+            artifact_path: |
+              dist/*.AppImage
+              dist/*.deb
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build packages
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: "false"
+        run: npm run ${{ matrix.npm_script }}
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: yuketang-${{ matrix.artifact_name }}-v${{ needs.meta.outputs.version }}
+          path: ${{ matrix.artifact_path }}
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: [meta, package]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download packaged artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: yuketang-*-v${{ needs.meta.outputs.version }}
+          merge-multiple: true
+          path: release-artifacts
+
+      - name: Create or update GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ needs.meta.outputs.tag }}
+          name: Yuketang v${{ needs.meta.outputs.version }}
+          commit: ${{ github.sha }}
+          allowUpdates: true
+          replacesArtifacts: true
+          removeArtifacts: true
+          makeLatest: true
+          artifacts: release-artifacts/*

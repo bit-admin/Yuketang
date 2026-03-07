@@ -1,0 +1,83 @@
+{
+  "name": "yuketang",
+  "version": "1.0.0",
+  "description": "Electron app that embeds Yuketang and exports lesson summaries as PDF or JPG.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --publish never",
+    "pack:mac": "electron-builder --mac dmg --publish never",
+    "pack:win": "electron-builder --win nsis --publish never",
+    "pack:linux": "electron-builder --linux AppImage deb --publish never"
+  },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  },
+  "devDependencies": {
+    "electron": "^37.1.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "cn.yuketang.exporter",
+    "productName": "Yuketang",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "category": "public.app-category.education"
+    },
+    "dmg": {
+      "sign": false
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "deb",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "category": "Education",
+      "maintainer": "Yuketang Maintainer <packager@yuketang.app>"
+    },
+    "deb": {
+      "maintainer": "Yuketang Maintainer <packager@yuketang.app>"
+    }
+  }
+}

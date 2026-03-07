@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Yuketang</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="control-bar">
+      <div class="control-main">
+        <div class="control-item lesson-item">
+          <label for="lessonId">Lesson ID</label>
+          <input id="lessonId" placeholder="Auto-detected" />
+        </div>
+
+        <div class="control-item output-item">
+          <label for="outputDir">Output</label>
+          <div class="output-input-wrap">
+            <input id="outputDir" />
+            <button id="browseBtn" type="button">Browse</button>
+          </div>
+        </div>
+
+        <div class="control-item format-item">
+          <label for="format">Format</label>
+          <select id="format">
+            <option value="pdf">PDF</option>
+            <option value="jpg">JPG</option>
+          </select>
+        </div>
+
+        <div class="action-group">
+          <button id="exportBtn" type="button" class="primary" disabled>Export</button>
+        </div>
+      </div>
+      <div id="status" class="status">
+        <span id="statusMessage" class="status-message"
+          >Open Yuketang and navigate to a lesson report or class fullscreen page.</span
+        >
+        <button id="openFolderBtn" class="status-link" type="button" hidden>
+          <span>Open folder</span>
+          <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+            <path d="M3 8h9"></path>
+            <path d="M9 4l4 4-4 4"></path>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="webview-wrap">
+      <webview
+        id="yuketangWebview"
+        src="https://www.yuketang.cn/web"
+        allowpopups
+        partition="persist:yuketang"
+      ></webview>
+    </main>
+
+    <script src="./renderer.js"></script>
+  </body>
+</html>
