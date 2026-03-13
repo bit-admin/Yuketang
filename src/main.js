@@ -146,6 +146,13 @@ function createMainWindow() {
     },
   });
 
+  mainWindow.webContents.on('did-attach-webview', (_event, webContents) => {
+    webContents.setWindowOpenHandler(({ url }) => {
+      webContents.loadURL(url);
+      return { action: 'deny' };
+    });
+  });
+
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 }
 

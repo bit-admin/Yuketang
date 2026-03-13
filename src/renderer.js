@@ -3,6 +3,8 @@ const outputDirInput = document.getElementById('outputDir');
 const formatSelect = document.getElementById('format');
 const browseBtn = document.getElementById('browseBtn');
 const exportBtn = document.getElementById('exportBtn');
+const backBtn = document.getElementById('backBtn');
+const homeBtn = document.getElementById('homeBtn');
 const statusWrap = document.getElementById('status');
 const statusText = document.getElementById('statusMessage');
 const openFolderBtn = document.getElementById('openFolderBtn');
@@ -216,6 +218,14 @@ window.electronAPI.onClassCaptureUpdate((capture) => {
 
 browseBtn.addEventListener('click', pickDirectory);
 exportBtn.addEventListener('click', exportCurrentLesson);
+backBtn.addEventListener('click', () => {
+  if (webview.canGoBack()) {
+    webview.goBack();
+  }
+});
+homeBtn.addEventListener('click', () => {
+  webview.loadURL('https://www.yuketang.cn/web');
+});
 outputDirInput.addEventListener('input', scheduleConfigSave);
 formatSelect.addEventListener('change', () => {
   saveConfig().catch((error) => {

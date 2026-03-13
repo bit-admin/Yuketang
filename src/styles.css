@@ -27,10 +27,47 @@ body {
 
 .control-main {
   display: grid;
-  grid-template-columns: minmax(170px, 240px) minmax(320px, 1fr) 125px auto;
+  grid-template-columns: auto minmax(170px, 240px) minmax(320px, 1fr) 125px auto;
   gap: 8px;
   align-items: center;
   min-width: 0;
+}
+
+.nav-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.nav-btn svg {
+  width: 16px;
+  height: 16px;
+  stroke: #4b5563;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.nav-btn:hover {
+  background: #f0f4ff;
+}
+
+.nav-btn:hover svg {
+  stroke: #2563eb;
 }
 
 .control-item {
